@@ -9,7 +9,7 @@ Developing an aCRF often involves tedious manual copying and adjustments of PDF 
 * **Visual Web Interface**: An intuitive HTML frontend that allows users to easily manage bookmarks and search results.
 * **Smart Copy & Paste (Ctrl+C / Ctrl+V)**: Automatically generates standardized uppercase UUIDs conforming to PDF specifications, enabling rapid duplication and multiple placements of annotations.
 * **Precision Backend Modification**: The Python backend utilizes highly efficient Regular Expressions (Regex) to target and replace only the outermost `name` attribute of the `<freetext>` tags without breaking the underlying rich text structure.
-* **Format Resilience**: Robustly parses rectangular coordinates separated by either commas `,` or semicolons `;`, equipped with fallbacks for styles and colors.
+* **Robust JSON/XFDF Parsing**: Efficiently parses rectangular coordinates (`Rect`) from XFDF files with built-in styling, fonts, and color fallback protections.
 
 ## 👤 Author
 * **Created by**: Chris Peng
@@ -29,6 +29,7 @@ Developing an aCRF often involves tedious manual copying and adjustments of PDF 
 1. Download `aCRF_Editor_Tool.py`, `pdf.js`, and `pdf.worker.js` into the same directory.
 2. Run the Python script to spin up the local server and backend service.
 3. Open `http://127.0.0.1:8080` in your web browser, load your XFDF files, and enjoy a seamless annotation editing experience!
+
 > 💡 *Note: The port defaults to **8080**, but you can easily customize the port directly inside the Python script to fit your environment.*
 
 ### 3. Dependency Notice
