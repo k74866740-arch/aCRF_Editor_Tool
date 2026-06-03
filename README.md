@@ -3,7 +3,7 @@
 A dedicated XFDF annotation editing and copy-paste utility designed for Clinical Trial aCRF (Annotated Case Report Form) development.
 
 ## 📝 Overview
-Developing an aCRF often involves tedious manual copying and adjustments of PDF annotations. This tool seamlessly integrates a Python backend with a web-based frontend interface, resolving the cumbersome workflows of managing rectangular coordinates (`Rect`) and updating unique XFDF identifiers (`Name`/`UUID`). It significantly enhances the productivity of Statistical Programmers.
+Developing an aCRF often involves tedious manual copying and adjustments of PDF annotations. This tool seamlessly integrates a Python backend with a web-based frontend interface, resolving the cumbersome workflows of managing rectangular coordinates (`Rect`) and updating unique XFDF identifiers. It significantly enhances the productivity of Statistical Programmers.
 
 ## ✨ Key Features
 * **Visual Web Interface**: An intuitive HTML frontend that allows users to easily manage bookmarks and search results.
@@ -26,10 +26,10 @@ Developing an aCRF often involves tedious manual copying and adjustments of PDF 
 * A modern web browser (Chrome / Edge / Firefox)
 
 ### 2. Usage
-1. Download both the Python script and the HTML file into the same directory.
-2. Run the Python script to spin up the backend service.
-3. Open the frontend interface in your browser, load your XFDF files, and enjoy a seamless annotation editing experience!
+1. Download `aCRF_Editor_Tool.py`, `pdf.js`, and `pdf.worker.js` into the same directory.
+2. Run the Python script to spin up the local server and backend service.
+3. Open `http://127.0.0.1:8080` in your web browser, load your XFDF files, and enjoy a seamless annotation editing experience!
+> 💡 *Note: The port defaults to **8080**, but you can easily customize the port directly inside the Python script to fit your environment.*
 
-### 3. Additional Dependency Setup
-This tool requires **pdf.js** and **pdf.worker.js** to render PDF files. 
-Please ensure you place these two files into the same directory as the HTML file. You can download them from the official repository or use a CDN version.
+### 3. Dependency Notice
+Since **pdf.js** and **pdf.worker.js** are already included in this repository, you just need to download them along with the Python script into the same directory.
