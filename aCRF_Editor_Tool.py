@@ -364,7 +364,7 @@ HTML_TEMPLATE = r"""
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>PDF 精準編輯器 Pro</title>
+    <title>aCRF Editor</title>
     <style>
         body { margin: 0; background: #222; color: white; font-family: sans-serif; overflow: hidden; display: flex; flex-direction: column; height: 100vh; }
         #toolbar { height: 50px; background: #111; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid #444; gap: 15px; }
@@ -603,7 +603,7 @@ HTML_TEMPLATE = r"""
 </head>
 <body onkeydown="handleKeyDown(event)">
     <div id="toolbar">
-        <button onclick="changePage(-1)" style="width:auto">上一頁</button>
+        <button onclick="changePage(-1)" style="width:auto">Prev</button>
         <div style="display:flex; align-items:center; gap:5px;">
             <span>Page:</span>
             <input type="text" id="p_input" min="1" 
@@ -611,8 +611,8 @@ HTML_TEMPLATE = r"""
                 onkeydown="if(event.key==='Enter') jumpToPage(this.value)">
             <span id="p_total">/ -</span>
         </div>
-        <button onclick="changePage(1)" style="width:auto">下一頁</button>
-        <button onclick="submitSave()" style="background:#28a745; border:none; padding: 8px 20px; width:auto; margin-left: 10px;">儲存 XFDF</button>
+        <button onclick="changePage(1)" style="width:auto">Next</button>
+        <button onclick="submitSave()" style="background:#28a745; border:none; padding: 8px 20px; width:auto; margin-left: 10px;">Save XFDF</button>
 
         <!-- 懸浮出來的快捷鍵提示字卡 -->
         <div class="shortcut-container" style="position: relative; display: inline-block; margin-left: 10px;">
@@ -622,62 +622,62 @@ HTML_TEMPLATE = r"""
             
             <!-- 這是提示字卡（現在被包在裡面了，絕對不會再單獨印在工具列上） -->
             <div class="shortcut-dropdown">
-                <h4 style="margin: 0 0 8px 0; color: #2ecc71; font-size: 14px; border-bottom: 1px solid #444; padding-bottom: 4px; font-family: sans-serif;">快捷鍵指引</h4>
+                <h4 style="margin: 0 0 8px 0; color: #2ecc71; font-size: 14px; border-bottom: 1px solid #444; padding-bottom: 4px; font-family: sans-serif;">Shortcuts Guide</h4>
                 <div style="display: grid; grid-template-columns: auto auto; gap: 6px 12px; font-size: 12px; color: #ddd; white-space: nowrap; font-family: sans-serif; text-align: left;">
-                    <div><kbd>Ctrl</kbd> + <kbd>Z</kbd></div><div>還原上一步</div>
-                    <div><kbd>Delete</kbd></div><div>刪除選取當前欄位</div>
-                    <div><kbd>*ALL*</kbd></div><div>選取全文件欄位</div>
+                    <div><kbd>Ctrl</kbd> + <kbd>Z</kbd></div><div>Undo</div>
+                    <div><kbd>Delete</kbd></div><div>Delete selected annotation</div>
+                    <div><kbd>*ALL*</kbd></div><div>Select all annotations</div>
                 </div>
             </div>
         </div>
 
-        <span id="msg">就緒</span>
+        <span id="msg">Ready</span>
     </div>
 
     <div id="main">
         <!-- 新增：左側搜尋面板 -->
         <div id="search-panel" style="width: 200px; background: #2a2a2a; border-right: 1px solid #444; display: flex; flex-direction: column; padding: 10px; gap: 5px;">
-            <h3>搜尋書籤預覽</h3>
+            <h3>Bookmark Search</h3>
             <div class="prop-group">
                 <!-- 調整一：改為按下 Enter 鍵才觸發搜尋，或者按右邊的按鈕 -->
-                <input type="text" id="bookmark_search_input" placeholder="輸入書籤關鍵字..." onkeyup="if(event.key==='Enter') triggerBookmarkSearch()">
+                <input type="text" id="bookmark_search_input" placeholder="Enter bookmark keyword..." onkeyup="if(event.key==='Enter') triggerBookmarkSearch()">
                 <!-- 調整二：新增實體按鈕，與下方註解搜尋完美對稱 -->
-                <button onclick="triggerBookmarkSearch()" style="background:#555; color: #0f0; margin-top:8px; width: 100%; padding: 4px;">搜尋書籤</button>
+                <button onclick="triggerBookmarkSearch()" style="background:#555; color: #0f0; margin-top:8px; width: 100%; padding: 4px;">Search Bookmarks</button>
             </div>
             <hr style="width:100%; border:0; border-top:1px solid #444; margin:5px 0;">
 
-            <h3>搜尋預覽</h3>
+            <h3>Annotation Search</h3>
             <div class="prop-group">
-                <input type="text" id="search_input" placeholder="輸入關鍵字..." onkeyup="if(event.key==='Enter') searchAnnotations()">
-                <button onclick="searchAnnotations()" style="background:#555; color: #0f0; margin-top:8px;">搜尋全文件</button>
+                <input type="text" id="search_input" placeholder="Enter search keyword..." onkeyup="if(event.key==='Enter') searchAnnotations()">
+                <button onclick="searchAnnotations()" style="background:#555; color: #0f0; margin-top:8px;">Search Full Document</button>
             </div>
             <hr style="width:100%; border:0; border-top:1px solid #444; margin:5px 0;">
 
-            <h3>品質檢查摘要</h3>
+            <h3>QC Summary</h3>
             <div id="qc_summary" style="display: flex; flex-direction: column; gap: 8px;">
                 <!-- 警告統計會顯示在這裡 -->
                 <div onclick="filterAnomalies('overlap')" class="qc-item">
-                    <span class="qc-label">重疊物件:</span> 
+                    <span class="qc-label">Duplicate Objects:</span> 
                     <span class="qc-count" id="count_overlap">0</span> <!-- 確保 ID 在這個 span 上 -->
                 </div>
                 <div onclick="filterAnomalies('font')" class="qc-item">
-                    <span class="qc-label">字體不符:</span> 
+                    <span class="qc-label">Font Mismatches:</span> 
                     <span class="qc-count" id="count_font">0</span>
                 </div>
             </div>
             <div id="search_results" style="flex: 1; overflow-y: auto; font-size: 12px; color: #ccc;">
                 <!-- 搜尋結果會顯示在這裡 -->
-                <div style="color: #666; text-align: center; margin-top: 10px;">尚無搜尋結果</div>
+                <div style="color: #666; text-align: center; margin-top: 10px;">No results found</div>
             </div>
         </div>
 
         <div id="viewer"><div id="canvas-wrapper"><canvas id="c"></canvas><div id="layer"></div><div id="marquee"></div></div></div>
         <div id="side-panel">
-            <h3>屬性編輯</h3>
+            <h3>Property Editor</h3>
             <div class="prop-group">
                 <!-- 使用 flex 讓文字與按鈕並排，並拉開間距 -->
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                    <label style="margin: 0;">內容 (Text):</label>
+                    <label style="margin: 0;">Content:</label>
                     <!-- 新增粗體狀態按鈕 -->
                     <div style="display: flex; gap: 6px; margin-right: 8px; margin-left: auto;">
                         <!-- B 按鈕 -->
@@ -728,8 +728,8 @@ HTML_TEMPLATE = r"""
 
 
             <div class="btn-row" style="margin-bottom:4px;">
-                <div class="prop-group"><label>寬度 (W):</label><input type="number" id="inp_w" step="0.1"></div>
-                <div class="prop-group"><label>高度 (H):</label><input type="number" id="inp_h" step="0.1"></div>
+                <div class="prop-group"><label>Width:</label><input type="number" id="inp_w" step="0.1"></div>
+                <div class="prop-group"><label>Height:</label><input type="number" id="inp_h" step="0.1"></div>
             </div>
 
             <div class="prop-group" style="margin-bottom:4px;">
@@ -748,18 +748,18 @@ HTML_TEMPLATE = r"""
             </div>
 
             <div class="prop-group" style="margin-bottom:4px;">
-                <label>註解顏色 (Annotation Color):</label>
+                <label>Annotation Color:</label>
                 <div class="prop-group" style="margin-bottom:4px;">
 
                 <div style="position: relative; width: 100%;">
                     <select id="inp_color" onchange="handleColorChange(this.value)" 
                             style="width: 100%; background: #333; color: #fff; padding: 6px 30px 6px 6px; border: 1px solid #555; border-radius: 4px; box-sizing: border-box; font-weight: bold; transition: background-color 0.2s; -webkit-appearance: none; -moz-appearance: none; appearance: none; cursor: pointer;">
-                        <option value="#BFFFFF" style="background-color: #BFFFFF; color: #000;">淺藍 (Domain 1)</option>
-                        <option value="#FFFFAA" style="background-color: #FFFFAA; color: #000;">淺黃 (Domain 2)</option>
-                        <option value="#96FF96" style="background-color: #96FF96; color: #000;">淺綠 (Domain 3)</option>
-                        <option value="#FFBE96" style="background-color: #FFBE96; color: #000;">淺橘 (Domain 4)</option>
-                        <option value="#1CBBEB" style="background-color: #1CBBEB; color: #fff;">亮藍 (Domain 5)</option>
-                        <option value="#CA7EEF" style="background-color: #CA7EEF; color: #fff;">淺紫 (Domain 6)</option>
+                        <option value="#BFFFFF" style="background-color: #BFFFFF; color: #000;">Light Blue (Domain 1)</option>
+                        <option value="#FFFFAA" style="background-color: #FFFFAA; color: #000;">Light Yellow (Domain 2)</option>
+                        <option value="#96FF96" style="background-color: #96FF96; color: #000;">Light Green (Domain 3)</option>
+                        <option value="#FFBE96" style="background-color: #FFBE96; color: #000;">Light Orange (Domain 4)</option>
+                        <option value="#1CBBEB" style="background-color: #1CBBEB; color: #fff;">Bright Blue (Domain 5)</option>
+                        <option value="#CA7EEF" style="background-color: #CA7EEF; color: #fff;">Light Purple (Domain 6)</option>
                     </select>
                     <div style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: inherit; font-size: 10px;">▼</div>
                 </div>
@@ -770,33 +770,33 @@ HTML_TEMPLATE = r"""
                 <div class="prop-group"><label>X1:</label><input type="number" id="inp_x1" step="0.1"></div>
                 <div class="prop-group"><label>Y1:</label><input type="number" id="inp_y1" step="0.1"></div>
             </div>
-            <button onclick="applyBatchProps()" style="background:#3498db; border:none; margin-top:5px;">統一套用屬性</button>
+            <button onclick="applyBatchProps()" style="background:#3498db; border:none; margin-top:5px;">Apply Properties Globally</button>
 
             <hr> <!-- 使用上面 CSS 定義的緊湊 hr -->
-            <h3>全文件批量修改</h3>
+            <h3>Bulk Edit Full Document</h3>
             <div class="prop-group" style="margin-bottom:3px;">
-                <label>目標文字 (精準匹配):</label>
-                <input type="text" id="batch_filter_text" placeholder="例如: AE (Adverse Events)">
+                <label>Target Text (Exact Match):</label>
+                <input type="text" id="batch_filter_text" placeholder="e.g., AE (Adverse Events)">
             </div>
-            <button onclick="applyGlobalUpdate()" style="background:#e67e22; border:none; margin-top:5px;">全文件一鍵套用</button>
+            <button onclick="applyGlobalUpdate()" style="background:#e67e22; border:none; margin-top:5px;">Apply to All Pages</button>
             <hr>
 
-            <h3>編輯工具</h3>
+            <h3>Alignment Tools</h3>
             <div class="btn-row" style="margin-bottom:5px;">
-                <button onclick="alignBatch('left')">統一靠左</button>
-                <button onclick="alignBatch('right')">統一靠右</button>
+                <button onclick="alignBatch('left')">Align Left</button>
+                <button onclick="alignBatch('right')">Align Right</button>
             </div>            
             <div class="btn-row" style="margin-bottom:5px;">
-                <button onclick="alignBatch('top')">統一頂對齊</button>
-                <button onclick="alignBatch('bottom')">統一底對齊</button>
+                <button onclick="alignBatch('top')">Align Top</button>
+                <button onclick="alignBatch('bottom')">Align Bottom</button>
             </div>
             <div class="btn-row" style="margin-bottom:5px;">
-                <button onclick="distribute('v')">垂直等間距</button>
-                <button onclick="distribute('h')">水平等間距</button>
+                <button onclick="distribute('v')">Dist. Vertically</button>
+                <button onclick="distribute('h')">Dist. Horizontally</button>
             </div>
             <div class="btn-row">
-                <button onclick="deleteSelected()" style="background:#dc3545; border:none;">刪除</button>
-                <button onclick="undo()" style="background:#6c757d; border:none;">還原</button>
+                <button onclick="deleteSelected()" style="background:#dc3545; border:none;">Delete</button>
+                <button onclick="undo()" style="background:#6c757d; border:none;">Undo</button>
             </div>
         </div>
     </div>
@@ -881,7 +881,7 @@ HTML_TEMPLATE = r"""
             container.innerHTML = "";
             
             if (list.length === 0) {
-                container.innerHTML = '<div style="color: #666; text-align: center; margin-top: 10px;">找不到相符的書籤</div>';
+                container.innerHTML = '<div style="color: #666; text-align: center; margin-top: 10px;">No results found</div>';
                 return;
             }
 
@@ -930,7 +930,7 @@ HTML_TEMPLATE = r"""
             }
 
             if (!cleanKw) {
-                container.innerHTML = '<div style="color: #666; text-align: center; margin-top: 10px;">尚無搜尋結果</div>';
+                container.innerHTML = '<div style="color: #666; text-align: center; margin-top: 10px;">No results found</div>';
                 return;
             }
             
@@ -944,7 +944,7 @@ HTML_TEMPLATE = r"""
             container.innerHTML = "";
             
             if (filtered.length === 0) {
-                container.innerHTML = '<div style="color: #666; text-align: center; margin-top: 10px;">找不到相符的書籤</div>';
+                container.innerHTML = '<div style="color: #666; text-align: center; margin-top: 10px;">No results found</div>';
                 return;
             }
 
@@ -1073,7 +1073,7 @@ HTML_TEMPLATE = r"""
             if (historyStack.length > 0) {
                 annots = historyStack.pop(); draw();
                 document.getElementById("msg").textContent = "已還原";
-                setTimeout(() => document.getElementById("msg").textContent = "就緒", 1000);
+                setTimeout(() => document.getElementById("msg").textContent = "Ready", 1000);
             }
         }
 
@@ -1213,7 +1213,7 @@ HTML_TEMPLATE = r"""
 
             if (type === 'font') {
                 results = annots.filter(a => !a.font || !a.font.toLowerCase().includes('arial'));
-                document.getElementById("msg").textContent = "已篩選字體異常項目";
+                document.getElementById("msg").textContent = "Filtered: Font Mismatches";
             } 
             else if (type === 'overlap') {
                 // --- 補上這段偵測重疊的邏輯 ---
@@ -1228,7 +1228,7 @@ HTML_TEMPLATE = r"""
                 }
                 // 從所有標註中找出 ID 在 overlapIds 裡的物件
                 results = annots.filter(a => overlapIds.has(a.id));
-                document.getElementById("msg").textContent = "已篩選嚴重重疊項目";
+                document.getElementById("msg").textContent = "Filtered: Overlapping Annotations";
                 // --------------------------
             }
 
@@ -1464,10 +1464,10 @@ HTML_TEMPLATE = r"""
             // 更新狀態列警告
             const msgEl = document.getElementById("msg");
             if (overlappingIds.size > 0) {
-                msgEl.textContent = ` 注意：有 ${overlappingIds.size} 個物件重疊過多`;
+                msgEl.textContent = ` Warning: ${overlappingIds.size} objects are significantly overlapping`;
                 msgEl.style.color = "#ffc107";
             } else {
-                msgEl.textContent = "就緒";
+                msgEl.textContent = "Ready";
                 msgEl.style.color = "#0f0";
             }
             updatePropInputs();
@@ -1670,7 +1670,7 @@ HTML_TEMPLATE = r"""
                             newOpt.id = "temp_unknown_color_opt";
                             newOpt.value = currentHex;
                             // 關鍵：強制寫入 textContent，保證畫面上一定看得到字！
-                            newOpt.textContent = `未知色號 (${currentHex})`; 
+                            newOpt.textContent = `Unknown Color (${currentHex})`; 
                             newOpt.style.backgroundColor = currentHex;
                             newOpt.style.color = "#000000";
                             
@@ -2037,7 +2037,7 @@ HTML_TEMPLATE = r"""
         // --- 核心修改：儲存中的狀態顯示 ---
         function submitSave() {
             const msgEl = document.getElementById("msg");
-            msgEl.textContent = "儲存中...";
+            msgEl.textContent = "Saving...";
             msgEl.style.color = "#ffc107"; // 轉為黃色提示
 
             // 橫向強制封裝，絕對不允許任何事件在中途污染新舊文字
@@ -2072,20 +2072,20 @@ HTML_TEMPLATE = r"""
                 body: JSON.stringify(finalizedAnnots) 
             })
             .then(() => { 
-                msgEl.textContent = "儲存成功！已另存新檔"; 
+                msgEl.textContent = "Saved successfully! Saved as a new file"; 
                 msgEl.style.color = "#0f0";
 
                 // 【關鍵清理】：儲存成功後，清空所有記憶體中的 oldText 狀態，為下一次編輯做準備
                 originalTextMap = {};
 
                 setTimeout(() => {
-                    msgEl.textContent = "就緒";
+                    msgEl.textContent = "Ready";
                     msgEl.style.color = "#0f0";
                 }, 3000); // 停留 3 秒
             })
             .catch(() => {
                 console.error("儲存失敗錯誤紀錄:", err);
-                msgEl.textContent = "儲存失敗";
+                msgEl.textContent = "Save failed";
                 msgEl.style.color = "#f00";
             });
         }
