@@ -29,3 +29,7 @@ Developing an aCRF often involves tedious manual copying and adjustments of PDF 
 1. Download both the Python script and the HTML file into the same directory.
 2. Run the Python script to spin up the backend service.
 3. Open the frontend interface in your browser, load your XFDF files, and enjoy a seamless annotation editing experience!
+
+### 3. Additional Dependency Setup
+This tool requires **pdf.js** and **pdf.worker.js** to render PDF files. 
+Please ensure you place these two files into the same directory as the HTML file. You can download them from the official repository or use a CDN version.
