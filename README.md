@@ -42,7 +42,7 @@ If your corporate machine restricts external installers (e.g., IT blocked `.msi`
    ```powershell
    .\.venv\Scripts\Activate.ps1
    ```
-   > 💡 **Windows Troubleshooting Tip:** If you see a red error saying *编码脚本已被禁用 (Execution of scripts is disabled on this system)*, run the command below first, then try activating again:
+   > 💡 **Windows Troubleshooting Tip:** If you see a red error saying *Execution of scripts is disabled on this system*, run the command below first, then try activating again:
    > ```powershell
    > Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
    > ```
