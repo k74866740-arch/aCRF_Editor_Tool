@@ -33,16 +33,26 @@ If your machine allows running modern package managers, use **uv**:
 
 ### Option B: Built-in Python Setup (For Restricted IT Environments)
 If your corporate machine restricts external installers (e.g., IT blocked `.msi` or `.exe`), use Python's built-in `venv` and `pip`:
-1. Create and activate a local virtual environment:
+1. Create a local virtual environment:
    ```powershell
    python -m venv .venv
+   ```
+
+2. Activate the virtual environment:
+   ```powershell
    .\.venv\Scripts\Activate.ps1
    ```
-2. Automatically install all dependencies defined in `pyproject.toml`:
+   > 💡 **Windows Troubleshooting Tip:** If you see a red error saying *编码脚本已被禁用 (Execution of scripts is disabled on this system)*, run the command below first, then try activating again:
+   > ```powershell
+   > Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+   > ```
+
+3. Automatically install all dependencies defined in `pyproject.toml`:
    ```powershell
    pip install .
    ```
-3. Run the tool using:
+
+4. Run the tool using:
    ```powershell
    python aCRF_Editor_Tool.py
    ```
