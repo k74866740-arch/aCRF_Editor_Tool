@@ -21,16 +21,36 @@ Developing an aCRF often involves tedious manual copying and adjustments of PDF 
 
 ## 🚀 Quick Start
 
-### 1. Prerequisites
-* Python 3.x
-* A modern web browser (Chrome / Edge / Firefox)
+This project supports two environment setup methods depending on your company's IT security policy.
 
-### 2. Usage
-1. Download `aCRF_Editor_Tool.py`, `pdf.js`, and `pdf.worker.js` into the same directory.
-2. Run the Python script to spin up the local server and backend service.
-3. Open `http://127.0.0.1:8080` in your web browser, load your XFDF files, and enjoy a seamless annotation editing experience!
+### Option A: Standard Modern Setup (Recommended)
+If your machine allows running modern package managers, use **uv**:
+1. Run `uv sync` in the terminal to set up the environment and dependencies automatically.
+2. Run the tool using:
+   ```bash
+   uv run aCRF_Editor_Tool.py
+   ```
 
-> 💡 *Note: The port defaults to **8080**, but you can easily customize the port directly inside the Python script to fit your environment.*
+### Option B: Built-in Python Setup (For Restricted IT Environments)
+If your corporate machine restricts external installers (e.g., IT blocked `.msi` or `.exe`), use Python's built-in `venv` and `pip`:
+1. Create and activate a local virtual environment:
+   ```powershell
+   python -m venv .venv
+   .\.venv\Scripts\Activate.ps1
+   ```
+2. Automatically install all dependencies defined in `pyproject.toml`:
+   ```powershell
+   pip install .
+   ```
+3. Run the tool using:
+   ```powershell
+   python aCRF_Editor_Tool.py
+   ```
 
-### 3. Dependency Notice
-Since **pdf.js** and **pdf.worker.js** are already included in this repository, you just need to download them along with the Python script into the same directory.
+## 📦 File Delivery & Deployment
+Since **pdf.js** and **pdf.worker.js** are already bundled within this repository, you only need to ensure the following core components remain in the same directory:
+* `aCRF_Editor_Tool.py` (Backend Engine)
+* `pyproject.toml` (Dependency Specification)
+* `pdf.js` & `pdf.worker.js` (Web Rendering Layer)
+
+The system defaults to port **8080**. Once running, simply open `http://127.0.0.1:8080` in your web browser, load your files, and enjoy a seamless annotation editing experience!
