@@ -1,10 +1,15 @@
-import sys, http.server, socketserver, webbrowser, threading, base64, os, json, time, re, fitz
+# ==============================================================================
+#  aCRF Editor Tool - 核心依賴模組
+# ==============================================================================
+import os, sys, re, json, time, base64, threading, webbrowser, http.server, html, socketserver
 import xml.etree.ElementTree as ET
 
-import tkinter as tk
-from tkinter import filedialog
+# PDF 渲染與座標轉換核心 (PyMuPDF)
+import fitz  
 
+# 現代化 GUI 介面模組
 import customtkinter as ctk
+import tkinter as tk
 from tkinter import filedialog
 
 # ============================================================
@@ -143,7 +148,8 @@ def save_json_to_xfdf(json_data, original_xfdf, output_xfdf):
             new_text = item.get('text', None)
             is_bold = item.get('isBold', False)
             is_dash = item.get('isDash', False)
-            
+            new_font = item.get('font', None) 
+
             # 1. 嘗試找出該 ID 的完整 freetext 區塊 (修改既有物件)
             pattern = rf'(<freetext[^>]+?name="{node_id}".*?</freetext>)'
             match = re.search(pattern, content, flags=re.DOTALL | re.IGNORECASE)
@@ -209,7 +215,37 @@ def save_json_to_xfdf(json_data, original_xfdf, output_xfdf):
                     if cleaned_old in block:
                         block = block.replace(cleaned_old, new_text)
 
-                
+                if old_text and new_text:
+                    if old_text in block:
+                        block = block.replace(old_text, new_text)
+                    elif old_text.strip() in block:
+                        block = block.replace(old_text.strip(), new_text)
+
+                # ============================================================
+                # 【條件式 replace 方案】必須含有 text-decoration 才可以取代
+                # ============================================================
+                if new_font and isinstance(new_font, str):
+                    current_font_name = new_font.strip()
+                    
+                    # 1. 尋找所有 freetext 區塊中必備的富文本樣式起始點
+                    style_anchor = 'style="font-size:'
+                    f_start = block.find(style_anchor)
+                    
+                    if f_start != -1:
+                        # 2. 往下尋找該 style 屬性結尾的雙引號
+                        f_end = block.find('"', f_start + len(style_anchor))
+                        
+                        if f_end != -1 and f_end > f_start:
+                            # 3. 提取出目前的舊樣式字串 (例如：style="font-size:12.00pt;font-family:'Helvetica'")
+                            old_style_chunk = block[f_start : f_end + 1]
+                            
+                            # 4. 拼裝出結構完全對齊、僅抽換字體的新樣式字串
+                            # 同時保留您在上方已經算好的新字體大小 (new_fs)
+                            new_style_chunk = f'style="font-size:{new_fs:.2f}pt;font-family:\'{current_font_name}\'"'
+                            
+                            # 5. 純粹的 1 次 replace 置換，有 style="font-size: 保護，絕不越界誤殺！
+                            block = block.replace(old_style_chunk, new_style_chunk, 1)
+
                 # ============================================================
                 # 💡【純粹替換 2】：根據粗體狀態，單純取代關鍵字
                 # ============================================================
@@ -1824,7 +1860,7 @@ HTML_TEMPLATE = r"""
 
         function deleteSelected() {
             if (selectedIds.size === 0) return;
-            if (confirm(`確定刪除選中的 ${selectedIds.size} 個物件？`)) {
+            if (confirm(`Are you sure want to delete selected ${selectedIds.size} item(s)？`)) {
                 saveHistory(); annots = annots.filter(a => !selectedIds.has(a.id)); selectedIds.clear(); draw();
             }
         }
